@@ -26,8 +26,9 @@ Register-ScheduledTask -TaskName "AbsoluteHibernateGuard" `
     -Force
 
 Start-ScheduledTask -TaskName "AbsoluteHibernateGuard"
+```
 
-### Updated README Section: Maintenance
+## Updated README Section: Maintenance
 You can add this to the bottom of your GitHub `README.md`:
 
 ```markdown
