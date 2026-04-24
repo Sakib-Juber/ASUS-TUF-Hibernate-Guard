@@ -35,6 +35,7 @@ You can add this to the bottom of your GitHub `README.md`:
 ## Maintenance & Controls
 
 If you need to manage the guard (e.g., while watching a long movie or during a system update), use these Admin PowerShell commands:
+```
 
 **1. Stop the guard immediately (Current session only):**
 ```powershell
