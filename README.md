@@ -1,11 +1,28 @@
 # ASUS TUF Hibernate Guard
 A failsafe script to force hibernation on ASUS TUF laptops after 30 mins of physical idleness, bypassing Windows Modern Standby issues.
 
+## Why this exists
+Windows Modern Standby (S0) often fails to enter deep sleep on ASUS TUF series laptops, leading to battery drain and heat while in a bag. This script monitors raw user input and forces a hardware hibernation (S4) after 30 minutes of true inactivity.
+
 ## Setup
-1. Place `HibernateGuard.ps1` in `C:\Scripts\`.
-2. Run this in Admin PowerShell to register the background task:
+1. Create the folder `C:\Scripts\` and place `HibernateGuard.ps1` inside it.
+2. Open **PowerShell (Admin)** (Win+X > A).
+3. Run the following block to register the task as a silent background service:
+
 ```powershell
 $path = "C:\Scripts\HibernateGuard.ps1"
 $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-WindowStyle Hidden -ExecutionPolicy Bypass -File `"$path`""
-Register-ScheduledTask -TaskName "AbsoluteHibernateGuard" -Action $action -Trigger (New-ScheduledTaskTrigger -AtLogon) -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable) -RunLevel Highest -Force
+
+$trigger = New-ScheduledTaskTrigger -AtLogon
+$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+
+# Runs as SYSTEM to ensure the script is 100% invisible (no blue window flash)
+Register-ScheduledTask -TaskName "AbsoluteHibernateGuard" `
+    -Action $action `
+    -Trigger $trigger `
+    -Settings $settings `
+    -User "SYSTEM" `
+    -RunLevel Highest `
+    -Force
+
 Start-ScheduledTask -TaskName "AbsoluteHibernateGuard"
