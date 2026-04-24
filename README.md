@@ -52,7 +52,6 @@ Enable-ScheduledTask -TaskName "AbsoluteHibernateGuard"
 ```powershell
 Unregister-ScheduledTask -TaskName "AbsoluteHibernateGuard" -Confirm:$false
 ```
-```
 
 ### Pro-Tip for your ASUS TUF
 Since you're using this to solve **Modern Standby** issues—which are notorious on the TUF series—keeping these commands in your README is a great way to ensure you don't forget the task name months from now when you might need to troubleshoot a different power issue.
