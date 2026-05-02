@@ -1,5 +1,3 @@
-@@ -1 +1,11 @@
-# ASUS-TUF-Hibernate-Guard
 # ASUS TUF Hibernate Guard
 A failsafe script to force hibernation on ASUS TUF laptops after 30 mins of physical idleness, bypassing Windows Modern Standby issues.
 
