@@ -1,4 +1,4 @@
-﻿Add-Type @'
+Add-Type @'
 using System;
 using System.Runtime.InteropServices;
 public class UserInput {
@@ -32,5 +32,3 @@ while($true) {
     }
     Start-Sleep -Seconds 60
 }
-
-
