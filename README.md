@@ -1,9 +1,15 @@
 # ASUS TUF Hibernate Guard
-A failsafe script to force hibernation on ASUS TUF laptops after 30 mins of physical idleness, bypassing Windows Modern Standby issues.
+
+A background script that forces hibernation after 30 minutes of physical idleness, fixing the broken Modern Standby sleep on ASUS TUF laptops.
+
+---
 
 ## Setup
-1. Place `HibernateGuard.ps1` in `C:\Scripts\`.
-2. Run this in Admin PowerShell to register the background task:
+
+**Step 1:** Save `HibernateGuard.ps1` to `C:\Scripts\`
+
+**Step 2:** Open PowerShell as Administrator and run:
+
 ```powershell
 $path = "C:\Scripts\HibernateGuard.ps1"
 $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-WindowStyle Hidden -ExecutionPolicy Bypass -File `"$path`""
@@ -11,22 +17,45 @@ Register-ScheduledTask -TaskName "AbsoluteHibernateGuard" -Action $action -Trigg
 Start-ScheduledTask -TaskName "AbsoluteHibernateGuard"
 ```
 
-## Stop (Emergency Kill)
-Run in Admin PowerShell:
+The script will now run silently in the background and auto-start on every login.
+
+---
+
+## Change the Idle Timeout
+
+1. Open `C:\Scripts\HibernateGuard.ps1`
+2. Change this line to however many minutes you want:
 ```powershell
-Stop-ScheduledTask -TaskName "AbsoluteHibernateGuard"
-Stop-Process -Id (Get-ScheduledTaskInfo -TaskName "AbsoluteHibernateGuard").LastRunTime
+   $IdleLimitMinutes = 30
 ```
-Or if you know the PID:
+3. Restart the task in Admin PowerShell:
 ```powershell
-Stop-Process -Id  -Force
+   Stop-ScheduledTask -TaskName "AbsoluteHibernateGuard"
+   Start-ScheduledTask -TaskName "AbsoluteHibernateGuard"
 ```
-To find the PID:
+
+---
+
+## Emergency Stop
+
+**Step 1:** Find the script's process ID (PID):
 ```powershell
 Get-Process -Name powershell | Select-Object Id, StartTime, CPU
 ```
+Look for the process whose `StartTime` matches when you last started the task.
+
+**Step 2:** Kill it using that PID:
+```powershell
+Stop-ScheduledTask -TaskName "AbsoluteHibernateGuard"
+Stop-Process -Id <PID> -Force
+```
+Replace `<PID>` with the actual number from Step 1.
+
+---
 
 ## Disable Permanently
+
+Removes the task completely so it no longer runs on login:
 ```powershell
 Unregister-ScheduledTask -TaskName "AbsoluteHibernateGuard" -Confirm:$false
 ```
